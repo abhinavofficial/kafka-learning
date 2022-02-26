@@ -23,4 +23,18 @@ It works similar to database. Source of truth, physically stored and maintained,
 **Apache Kafka is a publish-subscribe messaging rethought as a distributed commit log.**
 
 ## Partitions
-Topic as a logical entity is represented by one of more physical log file, called partition.
+Topic as a logical entity is represented by one of more physical log file, called partition. The number of partition in a topic is configurable. A partition is the basis for which Kafka can scale out tremendously, become fault-tolerant and achieve higher level of throughput. As such, each partition is maintained on at least one or more Brokers.
+Each topic has at least one partition as you can obviously realize and save the **log file along with its index file** at /tmp/kafka-logs/{topic}-{partition}. The constraint you have to work around paritition is that **each partition MUST fit entirely on one machine**.
+In general, the scalability of Apache Kafka is determined by the number of partitions being managed by multiple broker nodes. The partition itself is managed by a partitioning scheme that is managed by the producer. If producer does not specify anything specific, then round-robin is invoked.
+
+
+
+
+
+https://kafka.apache.org/protocol.html
+https://www.confluent.io/blog/getting-started-with-rust-and-kafka/
+https://www.confluent.io/blog/kafka-scala-tutorial-for-beginners/
+https://github.com/apache/kafka
+https://thenewstack.io/building-a-simple-pure-rust-async-apache-kafka-client/
+https://github.com/kafka-rust/kafka-rust
+
