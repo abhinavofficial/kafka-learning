@@ -36,6 +36,6 @@ In a distributed system, there are many worker nodes that consistently need to c
 Zookeeper can do a lot on its own but in relation to how it is being used in Kafka.
 It is a centralized service for maintaining metadata about a cluster of distributed nodes. This includes bootstrap and runtime configuration information, health status, cluster and quoram group membership including the roles of elected node. Zookeeper itself is a distributed system consisting of multiple nodes in an "ensemble".
 
-[Apache Distributed Architecture](../images/Apache_Distributed_Architecture.png)
+![Apache Distributed Architecture](Apache_Distributed_Architecture.png)
 
 
