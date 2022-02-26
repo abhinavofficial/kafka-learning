@@ -27,8 +27,15 @@ Topic as a logical entity is represented by one of more physical log file, calle
 Each topic has at least one partition as you can obviously realize and save the **log file along with its index file** at /tmp/kafka-logs/{topic}-{partition}. The constraint you have to work around paritition is that **each partition MUST fit entirely on one machine**.
 In general, the scalability of Apache Kafka is determined by the number of partitions being managed by multiple broker nodes. The partition itself is managed by a partitioning scheme that is managed by the producer. If producer does not specify anything specific, then round-robin is invoked.
 
+### Partitioning Trade-offs
+* The more partitions the greater the zookeeper overhead. With large partition numbers, ensure proper ZK capacity. 
+* Message ordering can become complex. There is no global messaging order. You can have a single partition for global order but with other understood issues. Or, you can implement a smart Consumer-handling for ordering.
+* When the number of partitions are very high, the leader fail-over time can become time consuming. Typical failover time is few ms but in large cluster, these can add up. Hence, sometimes large organizations have many separate kafka cluster.
 
-
+## Fault-Tolerance
+Any system is bound to fail over period of time. Kafka can have Broker failure, Network failure, Disk failure and other. Zookeeper has the capability to repoint workload on any failed broker to another one. But the data may be lost sitting on that broker. To handle this, we have one more critical setting, called **Replication-factor**. This is a critical safeguard to ensure reliable work distribution. This ensures that messages are stored redundantly which make the cluster more resilient and fault-tolerance - all for the purpose of mitigating data loss.
+By setting the replication-factor to N, you have guareenteed to N-1 broker failure tolerance. A minimum of 2-3 is recommended.
+Replication factor can be configured per-topic basis.
 
 
 https://kafka.apache.org/protocol.html
