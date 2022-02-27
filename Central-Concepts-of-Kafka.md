@@ -35,13 +35,5 @@ In general, the scalability of Apache Kafka is determined by the number of parti
 ## Fault-Tolerance
 Any system is bound to fail over period of time. Kafka can have Broker failure, Network failure, Disk failure and other. Zookeeper has the capability to repoint workload on any failed broker to another one. But the data may be lost sitting on that broker. To handle this, we have one more critical setting, called **Replication-factor**. This is a critical safeguard to ensure reliable work distribution. This ensures that messages are stored redundantly which make the cluster more resilient and fault-tolerance - all for the purpose of mitigating data loss.
 By setting the replication-factor to N, you have guareenteed to N-1 broker failure tolerance. A minimum of 2-3 is recommended.
-Replication factor can be configured per-topic basis.
-
-
-https://kafka.apache.org/protocol.html
-https://www.confluent.io/blog/getting-started-with-rust-and-kafka/
-https://www.confluent.io/blog/kafka-scala-tutorial-for-beginners/
-https://github.com/apache/kafka
-https://thenewstack.io/building-a-simple-pure-rust-async-apache-kafka-client/
-https://github.com/kafka-rust/kafka-rust
-
+Please also note that replication factor can be configured per-topic basis.
+When a quoram is formed, the leader invites peers to participate in replication activity. Once in sync Replication (ISR) == Replication factor and controller is notified then the quoram is considered healthy. If leader broker is killed somehow, another peer within the quoram takes the leadership position. ISR goes to out of sync in case there is no available broken that can be peered. But there is no impact to producer and consumer, even though the consumer has noted this change.
