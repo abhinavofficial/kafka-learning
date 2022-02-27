@@ -68,3 +68,6 @@ As you are now aware that message order is preserved only at partition level. Th
 * Custom Partitioner
 * Asynchronous Send
 * Compression Options
+
+## Tool for testing
+bin/kafka-producer-perf-test.sh
