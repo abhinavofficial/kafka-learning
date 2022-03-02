@@ -4,6 +4,7 @@ import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Properties;
 
 public class KafkaConsumerSubscribeApp {
@@ -26,7 +27,7 @@ public class KafkaConsumerSubscribeApp {
             while (true) {
                 ConsumerRecords<String, String> records = myConsumer.poll(Duration.parse("PT10S"));
                 records.forEach(rec -> System.out.println(String.format("Topic: %s, Partition: %s, Offset: %s, Key: %s, Value: %s",
-                         rec.topic(), rec.partition(), rec.offset(), rec.key(), rec.value()))
+                         rec.topic(), rec.partition(), rec.offset(), rec.key(), rec.value().toUpperCase()))
                 );
             }
         } catch (Exception e) {
