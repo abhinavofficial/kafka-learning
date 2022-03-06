@@ -1,4 +1,4 @@
-# ??
+# Kafka Ecosystem
 
 ## Primary Use Cases for Apache Kafka
 * Connecting disparate sources of data

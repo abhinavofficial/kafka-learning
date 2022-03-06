@@ -1,9 +1,9 @@
-# kafka-pluralsight
+# kafka High Level
 It is a messaging system, "A high-throughput distributed message system" to be precise.
 
 To help manage these challenges, there are some solutions
-1. Database Replication and Log Shipping. RDBMS to RDBMS only, Database specific, tight coupling (schema), performance challenges (log shipping) and cubersome.
-2. ETL - tpyically properiety and costly, lots of custom development, scalability challenged, performance challenges and often require multiple instances.
+1. Database Replication and Log Shipping. RDBMS to RDBMS only, Database specific, tight coupling (schema), performance challenges (log shipping) and cumbersome.
+2. ETL - typically property and costly, lots of custom development, scalability challenged, performance challenges and often require multiple instances.
 3. Messaging - Traditional systems. Limited scalability, requires smaller messages, requires rapid consumption, not fault-tolerant
 4. Custom middleware magic
 
@@ -15,9 +15,9 @@ Publishers -> Broker -> Consumers.
 **Customer Middleware magic**
 1. Increasingly complex
 2. Deceiving
-3. Consistency concerns - more distributeed, more complexity
-4. Portentially expensive
-    Multiple-wrte pattern (Atomic transaction, coordination logic, performance and operational challenges)
+3. Consistency concerns - more distributed, more complexity
+4. Potentially expensive
+    Multiple-write pattern (Atomic transaction, coordination logic, performance and operational challenges)
     Messaging broken pattern (competing consumers and non-consuming consumer)
 
 ## Goal
@@ -27,7 +27,7 @@ In order to move High volume, High velocity and High variety data around
 3. Quickly
 4. Autonomously
 we need a solution that has following architectural / design constraints
-1. High throughput
+1. High throughput - No Serialization / Deserialization and Zero Copy (available for non-TLS connections).
 2. horizontally scalable
 3. Reliable and durable
 4. Loosely coupled producers and consumers
