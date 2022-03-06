@@ -1,9 +1,11 @@
+package github.abhinavofficial.kafka.pluralsight.producer;
+
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Properties;
 
-public class KafkaProducerApp {
+public class ProducerExampleApp {
     public static void main(String[] args) {
         Properties properties = new Properties();
         properties.put("bootstrap.servers", "localhost:9092, localhost:9092, localhost:9091");

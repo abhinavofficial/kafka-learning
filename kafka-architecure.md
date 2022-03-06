@@ -26,15 +26,15 @@ We have been using the word Work. What it really means in Kafka is -
 2. Categorizing it in topic
 3. Reliably persisting them for eventual consumption
 
-In a distributed system, there are many worker nodes that consistently need to communicate with each other - this process of communication is called consensus or gossip protocol. Besides the obvious data payloads being transferred as messages,there are other types of network communication that keep happening that keep the cluster operaing normally. For example, -
+In a distributed system, there are many worker nodes that consistently need to communicate with each other - this process of communication is called consensus or gossip protocol. Besides, the obvious data payloads being transferred as messages,there are other types of network communication that keep happening that keep the cluster operating normally. For example, -
 * Work node membership and naming
-* Receiving bootstrap configuration setting and being notified of new setting consistenty in timely fashion
+* Receiving bootstrap configuration setting and being notified of new setting consistently in timely fashion
 * Events related to selection of controller and leader
 * Health status updates like heartbeat events
 
 ## Apache Zookeeper
 Zookeeper can do a lot on its own but in relation to how it is being used in Kafka.
-It is a centralized service for maintaining metadata about a cluster of distributed nodes. This includes bootstrap and runtime configuration information, health status, cluster and quoram group membership including the roles of elected node. Zookeeper itself is a distributed system consisting of multiple nodes in an "ensemble".
+It is a centralized service for maintaining metadata about a cluster of distributed nodes. This includes bootstrap and runtime configuration information, health status, cluster and quorum group membership including the roles of elected node. Zookeeper itself is a distributed system consisting of multiple nodes in an "ensemble".
 
 ![Apache Distributed Architecture](images/Apache_Distributed_Architecture.png)
 

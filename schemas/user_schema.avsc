@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "User",
+  "namespace": "github.abhinavofficial.kafka.pluralsight.model",
+  "fields": [
+    {
+      "name": "userId",
+      "type": "string"
+    },
+    {
+      "name": "username",
+      "type": "string"
+    },
+    {
+      "name": "dateOfBirth",
+      "type": "int",
+      "LogicalType": "date"
+    }
+  ]
+}

@@ -39,3 +39,8 @@ This is what Apache Kafka is all about. It is named after Franz Kafka.
 * 2009: Kafka Inception Development begins
 * 2010: Initial Kafka Deployment @LinkedIn
 * 2011: Kafka Open sourced to ASF
+
+**Use Cases**
+* Messaging System (Publish / Subscribe pattern)
+* Distributed Storage to store data in a fault-tolerant, durable way
+* Data processing events as they occur (streaming)

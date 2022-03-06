@@ -1,3 +1,5 @@
+package github.abhinavofficial.kafka.pluralsight.consumer;
+
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
@@ -6,7 +8,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Properties;
 
-public class KafkaConsumerAssignApp {
+public class ConsumerAssignExampleApp {
     public static void main(String[] args) {
         Properties properties = new Properties();
         properties.put("bootstrap.servers", "localhost:9092, localhost:9092, localhost:9091");
