@@ -44,6 +44,17 @@
             <artifactId>avro</artifactId>
             <version>1.11.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <!-- https://packages.confluent.io/maven/io/confluent/kafka-streams-avro-serde/ -->
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-streams-avro-serde</artifactId>
+            <version>7.0.1</version>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

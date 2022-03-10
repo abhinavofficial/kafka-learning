@@ -27,5 +27,27 @@ In a stream application, we will most likely use a database as well to store the
 
 ## Stream Processors
 There are two categories of processors - 
-* Stateless. They do not require state to perform their jobs and they can process each event independently without worrying about the previous state.
-* Stateful. 
+* Stateless. They do not require state to perform their jobs, and they can process each event independently without worrying about the previous state.
+* Stateful. They require a state store in order to perform their operations.
+
+Kafka streams offers a large number of stateless operations.
+* Branch: We can use it to split messages into multiple branches based on some business logic.
+* Filter: For rejecting messaging based on a condition(s).
+* Inverse Filter: Opposite of a filter.
+* Map: Can be used for transforming a message from one type to another.
+* FlatMap: Useful for transforming one event to one or a multitude of events of the same or different types.
+* Foreach: useful to iterate over each event. **This is a terminal process. So, if a Foreach is used, then we will not be able to use a sink processor anymore.**
+* Peek: If you would just want to inspect the elements passing through the stream, peek can be used.
+* GroupBy: Is superuseful when we want to group the event based on some elements like key of the message or an attribute from the value.
+* Merge: Which can combine two streams in a single one.
+
+[More stateless Transformations](https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#stateless-transformations)
+
+Kafka streams offers a large number of stateful operations.
+* Aggregations: Like calculating the sum of all the events posted in a topic.
+* Count: Like counting messages with the same key.
+* Joins: Joining streams or tables can be very useful when we would like to enhance some messages with information on different topics.
+* Windowing: It can work with intervals of time on which we can perform various operations.
+* Custom Processor: by using lower-level API.
+
+[More stateful transformations](https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#stateful-transformations)

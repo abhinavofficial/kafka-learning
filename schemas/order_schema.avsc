@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "Order",
+  "namespace": "github.abhinavofficial.kafka.pluralsight.model",
+  "fields": [
+    {
+      "name": "userId",
+      "type": "string"
+    },
+    {
+      "name": "noOfItems",
+      "type": "int"
+    },
+    {
+      "name": "totalAmount",
+      "type": "float"
+    }
+  ]
+}
