@@ -70,3 +70,9 @@ An administrator will have to upload them. He uploads the key and the value sche
 
 ## Confluent Schema Registry
 [Schema Registry Code](https://github.com/confluentinc/schema-registry)
+
+Confluent, under Confluent Community Licensing, has one of the best implementation for AVRO, JSON and Protobuf serde.
+
+```
+schema-registry $ bin/schema-registry-start config/schema-registry.properties
+```

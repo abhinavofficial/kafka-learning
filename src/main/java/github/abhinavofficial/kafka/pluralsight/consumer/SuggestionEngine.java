@@ -1,6 +1,7 @@
 package github.abhinavofficial.kafka.pluralsight.consumer;
 
 import github.abhinavofficial.kafka.pluralsight.model.PreferredProduct;
+import github.abhinavofficial.kafka.pluralsight.model.Product;
 import github.abhinavofficial.kafka.pluralsight.model.User;
 import github.abhinavofficial.kafka.pluralsight.service.UserDB;
 
@@ -11,18 +12,20 @@ public class SuggestionEngine {
 
     private final UserDB userDB = new UserDB();
 
-    public void processSuggestions(String userId, String product) {
-        String[] valueSplit = product.split(",");
-        String productType = valueSplit[0];
-        String productColor = valueSplit[1];
-        String productDesign = valueSplit[2];
+    public void processSuggestions(User user, Product product) {
+        //String[] valueSplit = product.split(",");
+        String productType = String.valueOf(product.getType());
+        String productColor = String.valueOf(product.getColor());
+        String productDesign = String.valueOf(product.getDesignType());
 
-        System.out.println("User with user ID:" + userId +
+        System.out.println("User with user ID:" + String.valueOf(user.getUserId()) +
                 "showed interest over " + productType + " " +
                 "of color " + productColor + " and design " + productDesign);
 
+        if(user == null) return;
+
         // Retrieve preferences from the database
-        User user = userDB.findByID(userId);
+        //User user = userDB.findByID(String.valueOf(user.getUserId()));
 
         // Update user preferences
         user.getPreferences().add(new PreferredProduct(productColor, productType, productType));
