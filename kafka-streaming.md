@@ -51,3 +51,54 @@ Kafka streams offers a large number of stateful operations.
 * Custom Processor: by using lower-level API.
 
 [More stateful transformations](https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#stateful-transformations)
+
+## Windowing
+Ability to work within time window. We often need to perform some operations in time boxes.
+
+* Tumbling: We will have non-overlapping 30 mins time window.
+* Hopping: Every 10 mins, we will have a window of 30 mins created. This kind of windows is useful while addressing queries like something in last 30 mins.
+
+## KSQL
+It is under Confluent Community License.
+
+### Why?
+```svg
+Dev
+Friendly
+ ^             KSQL                  |
+ |      -------------------          |
+ |         Kafka Stream API          |
+ |      -----------------------      |
+ |      Producer and Consumer API    V
+                                   Capabilities
+```
+For simple operations like filtering, KSQL is quite good but for complex aggregations Kafka Streams may be the right solution. The main point is to find the balance between ease of development and flexibility for your application.
+
+### How?
+It has a very similar architecture as a traditional database. Everything starts with the Kafka Cluster since it is the core of Streaming platform.The streaming application will be built inside the KSQL server. This server connects to the Kafka Cluster and consumes and produces messages based on the instructions provided by the User. In Non-Prod, the user can use KSQL CLI to interact with KSQL server. The CLI does not necessarily have to be on the same machine as server because the two are using REST APIs to interact with each other. CLI statement would be passed to Server via REST API where the instruction will be parsed, and the streaming engine runs it. Each query represents a different streaming application.
+
+Every query that would run on KSQL server would be parsed to a topology and then run.
+
+```
+CREATE STREAM pipeapple_pizza AS   | <- .to("pineapple_pizza")  - Step 4
+    SELECT crust, size, topping    | <- .mapValues( pizza -> pizza.getCrust() + ", " + pizza.getSize() + ", " + pizza.getTopping()) - Step 3
+    FROM pizza                     | <- .stream("pizza") - Step 1
+    WHERE type = 'pineapple';      | <- .filter( pizza -> pizza.getType().equals("pineapple")) - Step 2
+```
+
+### When?
+* Streaming Operations (Data Analytics, Monitoring, IOT, etc.)
+* Viewing data - showing the content of a topic
+* Very easily enhance and manipulate the data stored in a topic.
+
+We can combine two data streams, change fields, or even eliminate them.
+
+### Syntax
+
+| Data Definition Language                                                                                                       | Data Manipulation Language                                                                                   |
+|--------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| CREATE STREAM </br> CREATE TABLE </br> DROP STREAM </br> DROP TABLE </br> CREATE STREAM AS SELECT </br> CREATE TABLE AS SELECT | SELECT </br> INSERT <br/> UPDATE ? </br> DELETE ? </br> CREATE STREAM AS SELECT </br> CREATE TABLE AS SELECT |
+
+We can create a stream or table from an underlying Kafka topic. While running one of these two statements, DDL will update its internal metadata with no effect whatsoever on any actual topic. Things evolve over time, so some streams or tables may become redundant. Drop are used for the same.
+
+Lets now learn another some of concepts using Alerts in Fraud Detection Application.
