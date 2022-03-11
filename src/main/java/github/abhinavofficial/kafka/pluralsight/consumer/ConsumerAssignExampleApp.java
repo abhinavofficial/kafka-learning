@@ -15,7 +15,7 @@ public class ConsumerAssignExampleApp {
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
-        KafkaConsumer myConsumer = new KafkaConsumer(properties);
+        KafkaConsumer<String, String > myConsumer = new KafkaConsumer<String, String>(properties);
 
         ArrayList<TopicPartition> topics = new ArrayList<TopicPartition>();
         topics.add(new TopicPartition("my_other_topic", 0));

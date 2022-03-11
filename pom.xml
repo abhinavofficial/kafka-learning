@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
-            <version>2.8.0</version>
+            <version>3.1.0</version>
         </dependency>
         <!-- https://packages.confluent.io/maven/io/confluent/kafka-streams-avro-serde/ -->
         <dependency>
@@ -59,6 +59,7 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
 </project>

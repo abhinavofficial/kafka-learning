@@ -2,6 +2,7 @@ package github.abhinavofficial.kafka.pluralsight.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.protocol.types.Field;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class ConsumerSubscribeExampleApp {
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("group.id", "test");
 
-        KafkaConsumer myConsumer = new KafkaConsumer(properties);
+        KafkaConsumer<String, String> myConsumer = new KafkaConsumer<String, String>(properties);
         //subscribe is not incremental
         //myConsumer.subscribe(Arrays.asList("my-new-topic"));
         ArrayList<String> topics = new ArrayList<>();

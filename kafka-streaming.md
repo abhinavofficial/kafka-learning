@@ -101,4 +101,18 @@ We can combine two data streams, change fields, or even eliminate them.
 
 We can create a stream or table from an underlying Kafka topic. While running one of these two statements, DDL will update its internal metadata with no effect whatsoever on any actual topic. Things evolve over time, so some streams or tables may become redundant. Drop are used for the same.
 
-Lets now learn another some of concepts using Alerts in Fraud Detection Application.
+Let's now learn another some concepts using Alerts in Fraud Detection Application.
+
+Topic once registered is visible in KSQL Server. To register a topic into KSQL metadata Stream, we use 
+
+```sql
+create stream <stream name> 
+    with (kafka_topic='topic??', value_format='AVRO');
+
+create table warnings 
+as select userId, count(*) 
+    from <stream name> 
+    window hopping (size 10 minutes, advance by 1 minute) 
+    group by userID 
+    having count(*) > 1
+```
