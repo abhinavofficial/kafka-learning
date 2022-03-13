@@ -28,9 +28,9 @@ In order to move High volume, High velocity and High variety data around
 4. Autonomously
 we need a solution that has following architectural / design constraints
 1. High throughput - No Serialization / Deserialization and Zero Copy (available for non-TLS connections).
-2. horizontally scalable
+2. horizontally scalable (since partitioned)
 3. Reliable and durable
-4. Loosely coupled producers and consumers
+4. Loosely coupled producers and consumers (Especially in the world of containers) both spatially and in time.
 5. Flexible publish-subscribe semantics
 
 This is what Apache Kafka is all about. It is named after Franz Kafka.

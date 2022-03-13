@@ -2,7 +2,7 @@
 
 ## Architecture
 
-![Kafka Producer Internals](images/Kafka-producer-internals.png)
+![Kafka Producer Internals](../images/Kafka-producer-internals.png)
 
 ## Objects
 
@@ -36,7 +36,7 @@ Additionally, a pseudo-process pipeline to first serialize the message and then 
 
 ### Partition Strategy
 
-![Partitioning Strategy](images/Partitioning_Strategy.png)
+![Partitioning Strategy](../images/Partitioning_Strategy.png)
 
 ### Record Accumulation and Transmission
 Now with the partition defined, the record would now be passed to in-memory ```RecordAccumulator```. ```RecordAccumulator``` is a fairly low-level object with quite a few complexity. 

@@ -2,7 +2,7 @@
 
 ## Architecture
 
-![Kafka Consumer Internals](images/kafka-consumer-internals.png)
+![Kafka Consumer Internals](../images/kafka-consumer-internals.png)
 
 ## Objects
 
