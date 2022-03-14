@@ -22,3 +22,5 @@ With 0.10.0, Kafka Streams, a client library leverages existing Kafka machinery.
 
 ## Next Steps
 Course on **Kafka Schema Registry**, **Kafka Connect and Connector Hub** and **Kafka Streams**
+
+[Streaming ETL Tutorial](https://docs.ksqldb.io/en/latest/tutorials/etl)

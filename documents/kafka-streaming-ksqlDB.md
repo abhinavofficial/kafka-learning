@@ -25,9 +25,11 @@ Each stream processor can perform a specific task, and it can be chained to achi
 In a stream application, we will most likely use a database as well to store the data. That is why, when we are working with streams, we can perceive a stream from two different perspectives. Firstly, stream can be perceived as a stream. When we are talking about streaming, we are actually processing independent events with no connection whatsoever - we store these type of events in topic that uses **delete** as a cleanup policy (delete topic). Secondly, stream can be perceived as a table where we persist only the latest state for some specific information. So, perceiving streams as tables is all about processing evolving events. In Kafka, we are storing these events in **compaction** topics. The best part of having this duality in place is that we can always transform a stream into a table and vice versa. In order to transform a stream into a table, we can perform various operations like ```aggregate()```, ```reduce()``` or ```count()```. To achieve the reverse effect, we would just need to iterate over all the events from the beginning of time and store them as independent events (```toStream()```).
 
 ## Stream Processors
-There are two categories of processors - 
-* Stateless. They do not require state to perform their jobs, and they can process each event independently without worrying about the previous state.
-* Stateful. They require a state store in order to perform their operations.
+State is information that needs to be persisted between tasks.
+
+There are two categories of processors based on their association with state - 
+* Stateless. They do not require state to perform their jobs, and they can process each event independently without worrying about the previous state. Stateless process do work as it comes in and then forget it.
+* Stateful. They require a state store (like RocksDB, a persistent key-value store for high performance storage environment) in order to perform their operations. When state need to be managed, recovery and scaling out being more difficult.
 
 Kafka streams offers a large number of stateless operations.
 * Branch: We can use it to split messages into multiple branches based on some business logic.
@@ -47,15 +49,38 @@ Kafka streams offers a large number of stateful operations.
 * Count: Like counting messages with the same key.
 * Joins: Joining streams or tables can be very useful when we would like to enhance some messages with information on different topics.
 * Windowing: It can work with intervals of time on which we can perform various operations.
+* Tables: 
 * Custom Processor: by using lower-level API.
 
 [More stateful transformations](https://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#stateful-transformations)
 
-## Windowing
-Ability to work within time window. We often need to perform some operations in time boxes.
+## Managing time: Windowing
+
+Before we jump into windowing, let's understand the three types of timestamps we encounter in Kafka.
+* First is when the event is born or created, **event time**.
+* Second is when the event is ingested in Kafka, **ingestion time**
+* Finally, we have **processing time**. This is when Kafka stream or ksqlDB processes the data and usually, we want this to be as close as possible to the ingestion time.
+
+Windowing is the process of grouping records based on time and provides us ability to work within time window. We often need to perform some operations in time boxes.
 
 * Tumbling: We will have non-overlapping 30 mins time window.
-* Hopping: Every 10 mins, we will have a window of 30 mins created. This kind of windows is useful while addressing queries like something in last 30 mins.
+* Hopping: Every 10 mins (hop), we will have a window of 30 mins created. This kind of windows is useful while addressing queries like something in last 30 mins.
+* Session: We define a period/duration of inactivity or lack of events. The events between these matching inactivity are grouped together into dynamically sized windows.
+* Sliding: Sliding window only applies to **stream-to-stream joins**. Joined events have to be somewhat close in time. Example, when you have an issue with application 1, and you expect the impact on application 2, it can be established with joined using sliding window.
+
+While dealing with windows, the follow concepts become important -
+**Grace Period** - the period of time a system will wait for late or out of order events.
+**Retention Period** - the period of time a system will keep, or retain data. This value should be greater than length of window, and the grace period combined.
+
+## Consistency Management
+Issues - Read Never and Read Multiple
+
+Ideal - Read ONCE and ONLY ONCE.
+
+We discussed this topic while learning about [Consumer](kafka-consumer.md) briefly. Lets discuss it again - this is really a problem of any distributed streaming system.
+
+### Avoiding Never Read scenario
+
 
 ## Exercise 1: Fraud Detection System
 Let's learn the concepts of Kafka stream by implementing Fraud detection system - we will keep it simple and may not reflect the actual rules as implementing in a BFSI system.
@@ -68,88 +93,4 @@ Payment Service (creating and transmitting transactions) --> Kafka Cluster (**pa
 
 Fraud Detection Business Layer will execute Rule 1, 2 and 3 on messages from Payment topic.
 
-
-## ksqlDB
-It is under Confluent Community License. It is an event streaming database purpose-built to help developers create stream processing application on top of Apache Kafka. It was formerly known as ksql. Roughly, it is a sql variant of Kafka stream with some custom functions.
-
-| Traditional DB   | ksqlDB                                                                                                                |
-|------------------|-----------------------------------------------------------------------------------------------------------------------|
-| GUI or CLI       | **Webserver**: HTTPS </br> **CLI**: ksql                                                                              |
-| Query Engine     | ksqlDB                                                                                                                |
-| Execution Engine | Kafka Streams                                                                                                         |
-| Storage Engine   | * for persistent storage, use **Kafka** </br> * for more transient storage say state information, it uses **RocksDB** |
-
-### Why?
-```svg
-Dev
-Friendly
- ^             KSQL                  |
- |      -------------------          |
- |         Kafka Stream API          |
- |      -----------------------      |
- |      Producer and Consumer API    V
-                                   Capabilities
-```
-For simple operations like filtering, KSQL is quite good but for complex aggregations Kafka Streams may be the right solution. The main point is to find the balance between ease of development and flexibility for your application.
-
-### How?
-It has a very similar architecture as a traditional database. Everything starts with the Kafka Cluster since it is the core of Streaming platform.The streaming application will be built inside the KSQL server. This server connects to the Kafka Cluster and consumes and produces messages based on the instructions provided by the User. In Non-Prod, the user can use KSQL CLI to interact with KSQL server. The CLI does not necessarily have to be on the same machine as server because the two are using REST APIs to interact with each other. CLI statement would be passed to Server via REST API where the instruction will be parsed, and the streaming engine runs it. Each query represents a different streaming application.
-
-Every query that would run on KSQL server would be parsed to a topology and then run.
-
-```
-CREATE STREAM pipeapple_pizza AS   | <- .to("pineapple_pizza")  - Step 4
-    SELECT crust, size, topping    | <- .mapValues( pizza -> pizza.getCrust() + ", " + pizza.getSize() + ", " + pizza.getTopping()) - Step 3
-    FROM pizza                     | <- .stream("pizza") - Step 1
-    WHERE type = 'pineapple';      | <- .filter( pizza -> pizza.getType().equals("pineapple")) - Step 2
-```
-
-### When?
-* Streaming Operations (Data Analytics, Monitoring, IOT, etc.)
-* Viewing data - showing the content of a topic
-* Very easily enhance and manipulate the data stored in a topic.
-
-We can combine two data streams, change fields, or even eliminate them.
-
-### Syntax
-
-| Data Definition Language                                                                                                       | Data Manipulation Language                                                                                   |
-|--------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| CREATE STREAM </br> CREATE TABLE </br> DROP STREAM </br> DROP TABLE </br> CREATE STREAM AS SELECT </br> CREATE TABLE AS SELECT | SELECT </br> INSERT <br/> UPDATE ? </br> DELETE ? </br> CREATE STREAM AS SELECT </br> CREATE TABLE AS SELECT |
-
-We can create a stream or table from an underlying Kafka topic. While running one of these two statements, DDL will update its internal metadata with no effect whatsoever on any actual topic. Things evolve over time, so some streams or tables may become redundant. Drop are used for the same.
-
-## Installing ksqlDB
-
-### Using Docker Compose
-Two images that are required for installing ksqlDB
-* ksql CLI
-* ksqlDB (web interface or headless mode)
-
-If kafka is not configured, you would need images for
-* kafka
-* zookeeper
-* optionally schema registry
-
-Containers are modular and standardized. They are same sized and are interchangeable. They are isolated from each other. Containers are built on images. Images are templates for creating containers and are built in layers. Then we have Docker which is a container service that manages all the logistics and details of building and running Docker containers. Finally, we have Docker compose which is a tool for running applications that depend on many Docker containers. Docker compose allows us to keep all configuration information in one place, as well as starting all the containers in the right order and taking into consideration different dependencies between them.
-
-### Using Confluent Platform
-
-### Manual Build from GitHub
-
-## Exercise 2: Alerts in Fraud Detection Application
-Let's now learn another some concepts using Alerts in Fraud Detection Application.
-
-Topic once registered is visible in KSQL Server. To register a topic into KSQL metadata Stream, we use create table or stream.
-
-```sql
-create stream <stream name> 
-    with (kafka_topic='topic??', value_format='AVRO');
-
-create table warnings 
-as select userId, count(*) 
-    from <stream name> 
-    window hopping (size 10 minutes, advance by 1 minute) 
-    group by userID 
-    having count(*) > 1
-```
+Streaming is implemented in a SQL way using [ksqlDB](ksqlDB.md)
