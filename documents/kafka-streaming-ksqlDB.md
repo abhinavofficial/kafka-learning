@@ -80,7 +80,15 @@ Ideal - Read ONCE and ONLY ONCE.
 We discussed this topic while learning about [Consumer](kafka-consumer.md) briefly. Lets discuss it again - this is really a problem of any distributed streaming system.
 
 ### Avoiding Never Read scenario
+Ideally we want some sort of state store that can be migrated or reassigned to another process if one of them fails. In Kafka streams, you have granular control over what type of state store you use such as RocksDB. But in addition to that, we need a way to rebuild that state store if replication of copies of the state is not already enabled. For streams and ksqlDB this means reading from a compacted change log topic that tracks all the state changes for a long as they are relevant. Additionally, as part of recovery process, the work needs to be assigned to that other processor, so it can finish it. ksqlDB and Kafka streams both handle this for you automatically.
 
+### Avoiding multiple reads
+Let's understand one concept before diving into the solution.
+**Idempotent**: A mathematical operation that produces the same result if repeated. In computer science, this would translate to **an action that is safe to repeat**. In Stream world it would mean - If your system receives the same event multiple times, it can be handled properly.
+
+This can be handled through duplicate detection, unique IDs, or sequence IDs, depending on the scenario.
+
+We can actually choose which of these scenarios we want ksqlDB or Kafka streams to operate in. We just need to confgure **Processing Guarantee setting**. We touched upon this in previous learning on producer and consumer. Specifically the two options are called **exactly-once** and **at-least-once** (default). **exactly-once** semantics comes with small performance and storage cost - your processor, in this case in ksqlDB or Kafka streams, needs to be set as idempotent. It means, Kafka knows how to get rid of any duplicate events that have been produced multiple times by using a sequence number that's added to the event, similar to how TCP works for the TCP protocol. This would increase the size of your events by a small amount since we are adding information. Additionally, Kafka Streams and ksqlDB have to use **Kafka Transaction API** in order to track changes to state, track changes to the topic offset and output the transformative events atomically. Atomically means they happen all at once or not at all.
 
 ## Exercise 1: Fraud Detection System
 Let's learn the concepts of Kafka stream by implementing Fraud detection system - we will keep it simple and may not reflect the actual rules as implementing in a BFSI system.
